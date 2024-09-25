@@ -1,0 +1,50 @@
+preprocessing:
+  map_change_columns:
+    Обмен:
+      'Возможен': 1
+      'Не интересует': 0
+  map_bins:
+    Пробег_км:
+      bins: [0, 60000, 100000, 180000, 1500000]
+      labels: ['Маленькая', 'Умеренная', 'Средняя', 'Большая']
+  change_type_columns:
+    Рейтинг: float32
+    Мощность_двигателя_лс: int16
+    Пробег_км: int32
+    Год_выпуска: int16
+    Цена: int32
+    Объём_двигателя_л: float32
+    Обмен: int8
+    Много_владельцев: int8
+    Срок_эксплуатации: int8
+    История_пробега_кол_во_записей: int8
+    Владельцев_по_ПТС: int8
+    Выпуск_кол_во_лет: int8
+  raw_data_path: ../data/raw/parsed_data.csv
+  proc_data_path: ../data/processed/proc_data.csv
+  train_path_proc: ../data/processed/train.csv
+  test_path_proc: ../data/processed/test.csv
+  unique_values_path: ../data/processed/unique_values.json
+  cars_dict_path: ../data/processed/cars_dict.json
+  drop_columns: ['Название_авто', 'Расположение', 'Наименование_поколения']
+  test_size: 0.15
+  target_column: Цена
+  random_state: 1618
+
+train:
+  metrics_path: ../report/metrics.json
+  params_path: ../report/best_params.json
+  models_path: ../models/model_lgb.joblib
+  study_path: ../models/study.joblib
+  random_state: 1618
+  target_column: Цена
+  n_trials: 30
+  n_folds: 5
+
+evaluate:
+  predict_path: ../data/check/test.csv
+
+endpoints:
+  train: 'http://fastapi:8000/train'
+  prediction_by_input: 'http://fastapi:8000/prediction_by_input'
+  prediction_from_file: 'http://fastapi:8000/prediction_from_file'
